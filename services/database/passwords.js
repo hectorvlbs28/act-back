@@ -1,153 +1,57 @@
-const { Passwords } = require("../../models");
-const {
-  createPasswordCrypto,
-  decryptPasswordCrypto,
-} = require("../auth/passwordManager");
+const { Password } = require('../../models');
+const { createPasswordCrypto, decryptPasswordCrypto } = require('../auth/passwordManager');
 
-const createPasswordCryptoService = async (
-  pswd_value,
-  pswd_name,
-  pswd_description
-) => {
-  try {
-    const { ivHex, passwordCrypto } = await createPasswordCrypto(pswd_value);
-    const newPassword = await Passwords.create({
-      pswd_value: passwordCrypto,
-      pswd_name,
-      pswd_description,
-      pswd_ivhex: ivHex,
-    });
-
-    return newPassword.password_id;
-  } catch (error) {
-    console.log("-- Error in createPasswordService -> error: ", error.message);
-    return error;
-  }
+const createPasswordCryptoService = async (pswd_value, pswd_name, pswd_description) => {
+  const { ivHex, passwordCrypto } = await createPasswordCrypto(pswd_value);
+  const newPassword = await Password.create({
+    pswd_value: passwordCrypto,
+    pswd_name,
+    pswd_description,
+    pswd_ivhex: ivHex,
+  });
+  return newPassword._id;
 };
 
 const getPasswordByIdService = async (password_id) => {
-  try {
-    const { pswd_value, pswd_ivhex } = await Passwords.findOne({
-      where: {
-        password_id,
-        deleted: false,
-      },
-    });
-    const pswdDecrypted = await decryptPasswordCrypto(pswd_value, pswd_ivhex);
-
-    return pswdDecrypted;
-  } catch (error) {
-    console.log(
-      "-- Error in getPasswordByIdService -> error: ",
-      error.message,
-      error
-    );
-    return error;
-  }
+  const { pswd_value, pswd_ivhex } = await Password.findOne({
+    _id: password_id,
+    deleted: false,
+  });
+  return decryptPasswordCrypto(pswd_value, pswd_ivhex);
 };
 
 const getPasswordsListService = async () => {
-  const passwordsList = await Passwords.findAll({
-    attributes: [
-      ["password_id", "id"],
-      ["pswd_name", "name"],
-      ["pswd_description", "description"],
-    ],
-    where: { deleted: false },
-    order: [["updatedAt", "DESC"]],
-  });
-
-  return passwordsList;
+  return Password.find({ deleted: false })
+    .select('_id pswd_name pswd_description')
+    .sort({ updatedAt: -1 })
+    .lean()
+    .then((docs) => docs.map((d) => ({ id: d._id, name: d.pswd_name, description: d.pswd_description })));
 };
 
 const isPasswordDeletedService = async (password_id) => {
-  try {
-    const password = await Passwords.findOne({
-      attributes: ["deleted"],
-      where: { password_id },
-    });
-
-    if (!password) {
-      return false;
-    }
-
-    return password.deleted;
-  } catch (error) {
-    console.log(
-      "-- Error in isPasswordDeletedService -> error: ",
-      error.message
-    );
-    return false;
-  }
+  const password = await Password.findById(password_id).select('deleted');
+  return password ? password.deleted : false;
 };
 
 const doesPasswordExistService = async (password_id) => {
-  try {
-    const password = await Passwords.findOne({
-      attributes: ["password_id"],
-      where: { password_id },
-    });
-
-    return !!password;
-  } catch (error) {
-    console.log(
-      "-- Error in doesPasswordExistService -> error: ",
-      error.message
-    );
-    return false;
-  }
+  const password = await Password.findById(password_id).select('_id');
+  return !!password;
 };
 
 const deletePasswordService = async (password_id) => {
-  try {
-    await Passwords.update(
-      {
-        deleted: true,
-      },
-      {
-        where: {
-          password_id: password_id,
-        },
-      }
-    );
-
-    const { pswd_name } = await Passwords.findOne({
-      attributes: ["pswd_name"],
-      where: { password_id },
-    });
-
-    return { pswd_name };
-  } catch (error) {
-    console.log("-- Error in deletePasswordService -> error: ", error.message);
-    return error;
-  }
+  await Password.findByIdAndUpdate(password_id, { deleted: true });
+  const { pswd_name } = await Password.findById(password_id).select('pswd_name');
+  return { pswd_name };
 };
 
-const updatePasswordService = async (
-  password_id,
-  pswd_name,
-  pswd_description,
-  pswd_value
-) => {
-  try {
-    const { ivHex, passwordCrypto } = await createPasswordCrypto(pswd_value);
-    await Passwords.update(
-      {
-        pswd_name,
-        pswd_description,
-        pswd_value: passwordCrypto,
-        pswd_ivhex: ivHex,
-      },
-      {
-        where: {
-          password_id,
-        },
-      }
-    );
-  } catch (error) {
-    console.log("-- Error in updatePasswordService -> error: ", error.message);
-    return error;
-  }
+const updatePasswordService = async (password_id, pswd_name, pswd_description, pswd_value) => {
+  const { ivHex, passwordCrypto } = await createPasswordCrypto(pswd_value);
+  await Password.findByIdAndUpdate(password_id, {
+    pswd_name,
+    pswd_description,
+    pswd_value: passwordCrypto,
+    pswd_ivhex: ivHex,
+  });
 };
 
 module.exports = {

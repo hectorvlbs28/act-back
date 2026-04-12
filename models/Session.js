@@ -1,18 +1,18 @@
 const { mongoose } = require('../config/database');
 
-const userSchema = new mongoose.Schema(
+const sessionSchema = new mongoose.Schema(
   {
-    name: {
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    token: {
       type: String,
       required: true,
     },
-    userName: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
+    expiration_time: {
+      type: Number,
       required: true,
     },
     deleted: {
@@ -23,4 +23,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Session', sessionSchema);

@@ -1,0 +1,19 @@
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NODE_ENV: development
+      AUTH_SERVICE_URL: http://auth-service:3001
+      PASSWORDS_SERVICE_URL: http://passwords-service:3003
+      LOGS_SERVICE_URL: http://logs-service:3004
+    restart: unless-stopped
+
+networks:
+  default:
+    name: microservices-net

@@ -1,17 +1,20 @@
 const { mongoose } = require('../config/database');
 
-const userSchema = new mongoose.Schema(
+const passwordSchema = new mongoose.Schema(
   {
-    name: {
+    pswd_value: {
       type: String,
       required: true,
     },
-    userName: {
+    pswd_name: {
       type: String,
       required: true,
-      unique: true,
     },
-    password: {
+    pswd_description: {
+      type: String,
+      default: null, // campo opcional
+    },
+    pswd_ivhex: {
       type: String,
       required: true,
     },
@@ -23,4 +26,4 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('Password', passwordSchema);

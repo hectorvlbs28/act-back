@@ -1,32 +1,22 @@
-const { Sessions } = require('../../models');
+const { Session } = require('../../models');
 const { getUserByUserNameService } = require('./user');
 
 const createSessionService = async (userId, token, expirationTime) => {
-  try {
-    await Sessions.create({
-      user_id: userId,
-      token,
-      expiration_time: expirationTime,
-    });
-  } catch (error) {
-    console.log('-- Error in createSessionService -> error: ', error.message);
-    return error;
-  }
+  await Session.create({ user_id: userId, token, expiration_time: expirationTime });
 };
 
 const getSessionsCountService = async (userName) => {
-  const { user_id: userId } = await getUserByUserNameService(userName);
-  const sessionsCount = await Sessions.count({ where: { user_id: userId, deleted: false } });
-  return sessionsCount;
+  const { user_id } = await getUserByUserNameService(userName);
+  return Session.countDocuments({ user_id, deleted: false });
 };
 
 const sessionExistsService = async (token) => {
-  const session = await Sessions.findOne({ where: { token } });
-  return session ? true : false;
+  const session = await Session.findOne({ token });
+  return !!session;
 };
 
 const deleteSessionService = async (token) => {
-  await Sessions.update({ deleted: true }, { where: { token } });
+  await Session.updateOne({ token }, { deleted: true });
 };
 
 module.exports = {
