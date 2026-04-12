@@ -13,6 +13,34 @@ services:
       PASSWORDS_SERVICE_URL: http://passwords-service:3003
       LOGS_SERVICE_URL: http://logs-service:3004
     restart: unless-stopped
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      MONGO_URI: mongodb://mongo:27017/authDB
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRATION_TIME: ${JWT_EXPIRATION_TIME}
+      LIMIT_SESSIONS: ${LIMIT_SESSIONS}
+      USERS_SERVICE_URL: http://users-service:3002
+    depends_on:
+      - mongo
+    restart: unless-stopped
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
 
 networks:
   default:
