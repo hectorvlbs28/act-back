@@ -30,6 +30,19 @@ services:
     depends_on:
       - mongo
     restart: unless-stopped
+  users-service:
+    build:
+      context: ./users-service
+      dockerfile: Dockerfile
+    container_name: users-service
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      MONGO_URI: mongodb://mongo:27017/usersDB
+    depends_on:
+      - mongo
+    restart: unless-stopped
   mongo:
     image: mongo:latest
     container_name: mongo

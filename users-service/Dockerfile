@@ -9,6 +9,6 @@ COPY src/ ./src/
 
 ENV NODE_ENV=development
 
-EXPOSE 3001
+EXPOSE 3002
 
 CMD ["node", "src/index.js"]
