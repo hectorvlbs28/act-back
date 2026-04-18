@@ -1,0 +1,37 @@
+const User = require('../models/user');
+const { handleError } = require('../utils/handleError');
+const HttpStatus = require('../utils/httpStatus');
+
+const validateUserRegistered = async (req, res, next) => {
+  try {
+    const { userName } = req.body;
+    const exists = await User.findOne({ userName, deleted: false });
+    if (exists) {
+      return handleError(
+        res,
+        HttpStatus.BAD_REQUEST,
+        `El nombre de usuario ${userName} ya está registrado. Intenta con otro o inicia sesión.`
+      );
+    }
+    next();
+  } catch (error) {
+    console.error('Error en validateUserRegistered:', error.message);
+    return handleError(res, HttpStatus.INTERNAL_SERVER_ERROR, 'Error verificando el usuario.');
+  }
+};
+
+const verifyUserExists = async (req, res, next) => {
+  try {
+    const { userName } = req.body;
+    const user = await User.findOne({ userName, deleted: false });
+    if (!user) {
+      return handleError(res, HttpStatus.BAD_REQUEST, `El usuario ${userName} no está asociado a ninguna cuenta.`);
+    }
+    next();
+  } catch (error) {
+    console.error('Error en verifyUserExists:', error.message);
+    return handleError(res, HttpStatus.INTERNAL_SERVER_ERROR, 'Error verificando el usuario.');
+  }
+};
+
+module.exports = { validateUserRegistered, verifyUserExists };
