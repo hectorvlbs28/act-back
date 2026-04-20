@@ -43,6 +43,22 @@ services:
     depends_on:
       - mongo
     restart: unless-stopped
+  passwords-service:
+    build:
+      context: ./passwords-service
+      dockerfile: Dockerfile
+    container_name: passwords-service
+    ports:
+      - "3003:3003"
+    environment:
+      PORT: 3003
+      MONGO_URI: mongodb://mongo:27017/passwordsDB
+      CRYPTO_KEY: ${CRYPTO_KEY}
+      AUTH_SERVICE_URL: http://auth-service:3001
+    depends_on:
+      - mongo
+      - auth-service
+    restart: unless-stopped
   mongo:
     image: mongo:latest
     container_name: mongo
