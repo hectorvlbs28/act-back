@@ -1,17 +1,14 @@
+const { handleError, HttpStatus } = require('@networking/shared');
 const Password = require('../models/password');
-const { handleError } = require('../utils/handleError');
-const HttpStatus = require('../utils/httpStatus');
 
 const checkPasswordStatus = async (req, res, next) => {
   try {
-    const { id: password_id } = req.params;
-
-    if (!password_id) {
+    const { id } = req.params;
+    if (!id) {
       return handleError(res, HttpStatus.BAD_REQUEST, 'No se ha seleccionado una contraseña.');
     }
 
-    const password = await Password.findById(password_id);
-
+    const password = await Password.findById(id);
     if (!password) {
       return handleError(res, HttpStatus.NOT_FOUND, 'No se encontraron registros de la contraseña seleccionada.');
     }

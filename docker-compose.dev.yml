@@ -1,0 +1,44 @@
+services:
+  api-gateway:
+    build:
+      args:
+        NODE_ENV: development
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./api-gateway/src:/app/src
+      - ./shared:/shared
+    command: yarn dev
+
+  auth-service:
+    build:
+      args:
+        NODE_ENV: development
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./auth-service/src:/app/src
+      - ./shared:/shared
+    command: yarn dev
+
+  users-service:
+    build:
+      args:
+        NODE_ENV: development
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./users-service/src:/app/src
+      - ./shared:/shared
+    command: yarn dev
+
+  passwords-service:
+    build:
+      args:
+        NODE_ENV: development
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./passwords-service/src:/app/src
+      - ./shared:/shared
+    command: yarn dev

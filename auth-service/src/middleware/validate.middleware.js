@@ -1,7 +1,6 @@
+const { handleError, HttpStatus } = require('@networking/shared');
 const Session = require('../models/session');
 const { validateJwt } = require('../services/jwtManager');
-const { handleError } = require('../utils/handleError');
-const HttpStatus = require('../utils/httpStatus');
 
 const validateUserJwt = async (req, res, next) => {
   try {

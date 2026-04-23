@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const { handleError, HttpStatus } = require('@networking/shared');
 const User = require('../models/user');
-const { handleError } = require('../utils/handleError');
-const HttpStatus = require('../utils/httpStatus');
 
 router.get('/credentials', async (req, res) => {
   try {
@@ -13,9 +12,7 @@ router.get('/credentials', async (req, res) => {
 
     const user = await User.findOne({ userName, deleted: false });
     if (!user) {
-      return res.status(HttpStatus.NOT_FOUND).json({
-        message: 'Usuario no encontrado.',
-      });
+      return res.status(HttpStatus.NOT_FOUND).json({ message: 'Usuario no encontrado.' });
     }
 
     return res.status(HttpStatus.OK).json({

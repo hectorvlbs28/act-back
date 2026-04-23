@@ -1,22 +1,21 @@
 services:
   api-gateway:
     build:
-      context: ./api-gateway
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: api-gateway/Dockerfile
     container_name: api-gateway
     ports:
       - "3000:3000"
     environment:
       PORT: 3000
-      NODE_ENV: development
       AUTH_SERVICE_URL: http://auth-service:3001
       PASSWORDS_SERVICE_URL: http://passwords-service:3003
       LOGS_SERVICE_URL: http://logs-service:3004
     restart: unless-stopped
   auth-service:
     build:
-      context: ./auth-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: auth-service/Dockerfile
     container_name: auth-service
     ports:
       - "3001:3001"
@@ -32,8 +31,8 @@ services:
     restart: unless-stopped
   users-service:
     build:
-      context: ./users-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: users-service/Dockerfile
     container_name: users-service
     ports:
       - "3002:3002"
@@ -45,8 +44,8 @@ services:
     restart: unless-stopped
   passwords-service:
     build:
-      context: ./passwords-service
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: passwords-service/Dockerfile
     container_name: passwords-service
     ports:
       - "3003:3003"
