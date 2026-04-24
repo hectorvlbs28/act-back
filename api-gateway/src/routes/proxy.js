@@ -25,6 +25,8 @@ const applyProxyRoutes = (app) => {
   app.use(services.users.prefix, createProxy(services.users.url));
 
   app.use(services.passwords.prefix, createProxy(services.passwords.url));
+
+  app.use(services.python.prefix, createProxy(services.python.url));
 };
 
 module.exports = applyProxyRoutes;
