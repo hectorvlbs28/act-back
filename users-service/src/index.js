@@ -13,11 +13,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 app.get('/health', (_req, res) => res.status(200).json({ status: 'ok', service: 'users-service' }));
-
-// Rutas públicas — pasan por el gateway
-app.use('/auth', usersRoutes);
-
-// Rutas internas — solo accesibles dentro de la red Docker
+app.use('/', usersRoutes);
 app.use('/internal', internalRoutes);
 
 const PORT = process.env.PORT || 3002;

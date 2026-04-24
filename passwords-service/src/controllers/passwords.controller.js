@@ -11,7 +11,7 @@ exports.create = asyncHandler(async (req, res) => {
 
 exports.getAll = asyncHandler(async (req, res) => {
   const passwordsList = await Password.find(
-    { user_id: req.userId, deleted: false },
+    { deleted: false },
     { pswd_name: 1, pswd_description: 1, updatedAt: 1 }
   ).sort({ updatedAt: -1 });
   return res.status(HttpStatus.OK).json({ message: 'Contraseñas obtenidas con éxito.', passwordsList });
