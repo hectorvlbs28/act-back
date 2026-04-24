@@ -13,8 +13,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 app.get('/health', (_req, res) => res.status(200).json({ status: 'ok', service: 'auth-service' }));
-
-app.use('/auth', authRoutes);
+app.use('/', authRoutes);
 app.use('/validate', validateRoute);
 
 const PORT = process.env.PORT || 3001;

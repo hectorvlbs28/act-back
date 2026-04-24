@@ -13,7 +13,6 @@ const createProxy = (targetUrl) =>
         });
       },
       proxyReq: (proxyReq, req) => {
-        // Reenvía la IP real del cliente al microservicio
         proxyReq.setHeader('X-Real-IP', req.ip);
         proxyReq.setHeader('X-Forwarded-For', req.ip);
       },
@@ -23,9 +22,9 @@ const createProxy = (targetUrl) =>
 const applyProxyRoutes = (app) => {
   app.use(services.auth.prefix, createProxy(services.auth.url));
 
-  app.use(services.passwords.prefix, createProxy(services.passwords.url));
+  app.use(services.users.prefix, createProxy(services.users.url));
 
-  app.use(services.logs.prefix, createProxy(services.logs.url));
+  app.use(services.passwords.prefix, createProxy(services.passwords.url));
 };
 
 module.exports = applyProxyRoutes;
