@@ -2,12 +2,19 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --development
+COPY shared/ /shared/
 
-COPY src/ ./src/
+COPY passwords-service/package.json passwords-service/yarn.lock ./
 
-ENV NODE_ENV=development
+ARG NODE_ENV=production
+RUN if [ "$NODE_ENV" = "development" ]; \
+    then yarn install --frozen-lockfile; \
+    else yarn install --frozen-lockfile --production; \
+    fi
+
+COPY passwords-service/src/ ./src/
+
+ENV NODE_ENV=$NODE_ENV
 
 EXPOSE 3003
 

@@ -1,7 +1,6 @@
+const { handleError, HttpStatus } = require('@networking/shared');
 const Session = require('../models/session');
-const { getUserCredentials, getUserSessionsCount } = require('../services/usersClient');
-const { handleError } = require('../utils/handleError');
-const HttpStatus = require('../utils/httpStatus');
+const { getUserCredentials } = require('../services/usersClient');
 
 const LIMIT_SESSIONS = parseInt(process.env.LIMIT_SESSIONS, 10);
 

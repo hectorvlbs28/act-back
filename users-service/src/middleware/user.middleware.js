@@ -1,6 +1,5 @@
+const { handleError, HttpStatus } = require('@networking/shared');
 const User = require('../models/user');
-const { handleError } = require('../utils/handleError');
-const HttpStatus = require('../utils/httpStatus');
 
 const validateUserRegistered = async (req, res, next) => {
   try {
