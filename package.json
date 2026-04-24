@@ -12,6 +12,8 @@
     "// dev:passwords": "Levanta passwords + auth + users + mongo en modo development",
     "dev:passwords": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build passwords-service auth-service users-service mongo",
     "// dev:gateway": "Levanta solo el gateway en modo development",
-    "dev:gateway": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build api-gateway"
+    "dev:gateway": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build api-gateway",
+    "// dev:python": "Levanta python-service + gateway en modo development",
+    "dev:python": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build python-service api-gateway"
   }
 }

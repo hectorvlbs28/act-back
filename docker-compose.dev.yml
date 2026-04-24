@@ -42,3 +42,8 @@ services:
       - ./passwords-service/src:/app/src
       - ./shared:/shared
     command: yarn dev
+    
+  python-service:
+    volumes:
+      - ./python-service:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 3004 --reload

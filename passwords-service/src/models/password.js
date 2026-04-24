@@ -2,11 +2,6 @@ const mongoose = require('mongoose');
 
 const passwordSchema = new mongoose.Schema(
   {
-    user_id: {
-      type: String,
-      required: true,
-      index: true,
-    },
     pswd_value: {
       type: String,
       required: true,

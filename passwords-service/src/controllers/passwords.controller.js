@@ -5,7 +5,7 @@ const { encrypt, decrypt } = require('../utils/cryptoManager');
 exports.create = asyncHandler(async (req, res) => {
   const { name: pswd_name, password: pswd_value, description: pswd_description } = req.body;
   const { encrypted, ivHex: pswd_ivhex } = encrypt(pswd_value);
-  await Password.create({ user_id: req.userId, pswd_value: encrypted, pswd_name, pswd_description, pswd_ivhex });
+  await Password.create({ pswd_value: encrypted, pswd_name, pswd_description, pswd_ivhex });
   return res.status(HttpStatus.CREATED).json({ message: 'Contraseña creada correctamente.' });
 }, 'Hubo un problema al registrar la contraseña.');
 

@@ -11,6 +11,7 @@ services:
       AUTH_SERVICE_URL: http://auth-service:3001
       USERS_SERVICE_URL: http://users-service:3002
       PASSWORDS_SERVICE_URL: http://passwords-service:3003
+      PYTHON_SERVICE_URL: http://python-service:3004
     restart: unless-stopped
   auth-service:
     build:
@@ -57,6 +58,14 @@ services:
     depends_on:
       - mongo
       - auth-service
+    restart: unless-stopped
+  python-service:
+    build:
+      context: .
+      dockerfile: python-service/Dockerfile
+    container_name: python-service
+    ports:
+      - "3004:3004"
     restart: unless-stopped
   mongo:
     image: mongo:latest
