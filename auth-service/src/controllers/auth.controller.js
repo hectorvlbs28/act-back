@@ -37,8 +37,8 @@ exports.signin = asyncHandler(async (req, res) => {
 }, 'Hubo un problema al iniciar sesión.');
 
 exports.signout = asyncHandler(async (req, res) => {
-  const { userToken } = req.body;
-  await Session.updateOne({ token: userToken }, { deleted: true });
+  const { token } = req.session;
+  await Session.updateOne({ token }, { deleted: true });
   return res.status(HttpStatus.OK).json({
     message: 'Sesión cerrada correctamente. ¡Hasta pronto!',
   });

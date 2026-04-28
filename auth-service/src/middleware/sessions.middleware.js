@@ -1,4 +1,4 @@
-const { handleError, HttpStatus } = require('@networking/shared');
+const { handleError, HttpStatus, extractBearerToken } = require('@networking/shared');
 const Session = require('../models/session');
 const { getUserCredentials } = require('../services/usersClient');
 
@@ -36,11 +36,18 @@ const checkActiveSessionsLimit = async (req, res, next) => {
 
 const checkSessionExists = async (req, res, next) => {
   try {
-    const { userToken } = req.body;
-    const session = await Session.findOne({ token: userToken, deleted: false });
-    if (!session) {
-      return handleError(res, HttpStatus.BAD_REQUEST, 'No se encontró una sesión activa.');
+    const token = extractBearerToken(req);
+
+    if (!token) {
+      return handleError(res, HttpStatus.UNAUTHORIZED, 'Token no proporcionado.');
     }
+
+    const session = await Session.findOne({ token, deleted: false }).lean();
+
+    if (!session) {
+      return handleError(res, HttpStatus.UNAUTHORIZED, 'No se encontró una sesión activa.');
+    }
+    req.session = session;
     next();
   } catch (error) {
     console.error('Error en checkSessionExists:', error.message);
