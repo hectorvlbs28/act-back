@@ -23,6 +23,7 @@ exports.signup = asyncHandler(async (req, res) => {
     password: hashedPassword,
     role,
     area_id: role === 'super_admin' ? null : area_id,
+    avatar: null,
   });
 
   return res.status(HttpStatus.CREATED).json({

@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: 'operator',
     },
+    avatar: {
+      type: String,
+      default: null,
+    },
     area_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Area',
