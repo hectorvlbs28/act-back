@@ -20,9 +20,7 @@ const createProxy = (targetUrl) =>
   });
 
 const applyProxyRoutes = (app) => {
-  app.use(services.auth.prefix, createProxy(services.auth.url));
-
-  app.use(services.users.prefix, createProxy(services.users.url));
+  app.use(services.identity.prefix, createProxy(services.identity.url));
 
   app.use(services.passwords.prefix, createProxy(services.passwords.url));
 

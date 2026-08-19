@@ -1,13 +1,9 @@
 require('dotenv').config();
 
 const services = {
-  auth: {
-    url: process.env.AUTH_SERVICE_URL,
-    prefix: '/auth',
-  },
-  users: {
-    url: process.env.USERS_SERVICE_URL,
-    prefix: '/users',
+  identity: {
+    url: process.env.IDENTITY_SERVICE_URL,
+    prefix: '/identity',
   },
   passwords: {
     url: process.env.PASSWORDS_SERVICE_URL,

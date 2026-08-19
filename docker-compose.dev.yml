@@ -10,25 +10,14 @@ services:
       - ./shared:/shared
     command: yarn dev
 
-  auth-service:
+  identity-service:
     build:
       args:
         NODE_ENV: development
     environment:
       NODE_ENV: development
     volumes:
-      - ./auth-service/src:/app/src
-      - ./shared:/shared
-    command: yarn dev
-
-  users-service:
-    build:
-      args:
-        NODE_ENV: development
-    environment:
-      NODE_ENV: development
-    volumes:
-      - ./users-service/src:/app/src
+      - ./identity-service/src:/app/src
       - ./shared:/shared
     command: yarn dev
 

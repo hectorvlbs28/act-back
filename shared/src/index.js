@@ -3,6 +3,7 @@ const { handleError } = require('./handleError');
 const asyncHandler = require('./asyncHandler');
 const { createAuthMiddleware } = require('./authMiddleware');
 const { extractBearerToken } = require('./extractBearerToken');
+const { buildSwaggerDefinition } = require('./swaggerDefinition');
 
 module.exports = {
   HttpStatus,
@@ -10,4 +11,5 @@ module.exports = {
   asyncHandler,
   createAuthMiddleware,
   extractBearerToken,
+  buildSwaggerDefinition,
 };
