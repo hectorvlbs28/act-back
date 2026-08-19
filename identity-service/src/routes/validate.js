@@ -16,7 +16,7 @@ const { validateUserJwt } = require('../middleware/validate.middleware');
  *         description: Token inválido, expirado, o sin sesión activa
  */
 router.post('/', validateUserJwt, (req, res) => {
-  res.status(200).json({ valid: true, userId: req.userId });
+  res.status(200).json({ valid: true, userId: req.userId, role: req.userRole, area_id: req.userAreaId });
 });
 
 module.exports = router;

@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/areas.controller');
+const { validateUserJwt } = require('../middleware/validate.middleware');
+const { requireRole } = require('@networking/shared');
 
 /**
  * @swagger
  * /areas/create:
  *   post:
- *     summary: Crea una nueva área (exclusivo super_admin — RBAC pendiente de Fase 2)
+ *     summary: Crea una nueva área (exclusivo super_admin)
  *     tags: [Areas]
  *     security: [{ bearerAuth: [] }]
  *     requestBody:
@@ -26,8 +28,12 @@ const controller = require('../controllers/areas.controller');
  *     responses:
  *       201:
  *         description: Área creada correctamente
+ *       401:
+ *         description: No autenticado
+ *       403:
+ *         description: Rol insuficiente
  */
-router.post('/create', controller.create);
+router.post('/create', [validateUserJwt, requireRole('super_admin')], controller.create);
 
 /**
  * @swagger
@@ -39,8 +45,10 @@ router.post('/create', controller.create);
  *     responses:
  *       200:
  *         description: Listado de áreas
+ *       401:
+ *         description: No autenticado
  */
-router.get('/get/all', controller.getAll);
+router.get('/get/all', [validateUserJwt], controller.getAll);
 
 /**
  * @swagger
@@ -57,16 +65,18 @@ router.get('/get/all', controller.getAll);
  *     responses:
  *       200:
  *         description: Área encontrada
+ *       401:
+ *         description: No autenticado
  *       404:
  *         description: Área no encontrada
  */
-router.get('/get/:id', controller.getById);
+router.get('/get/:id', [validateUserJwt], controller.getById);
 
 /**
  * @swagger
  * /areas/update/{id}:
  *   put:
- *     summary: Actualiza un área (exclusivo super_admin — RBAC pendiente de Fase 2)
+ *     summary: Actualiza un área (exclusivo super_admin)
  *     tags: [Areas]
  *     security: [{ bearerAuth: [] }]
  *     parameters:
@@ -93,9 +103,13 @@ router.get('/get/:id', controller.getById);
  *         description: Área actualizada correctamente
  *       400:
  *         description: No se puede dar de baja un área con usuarios activos asignados
+ *       401:
+ *         description: No autenticado
+ *       403:
+ *         description: Rol insuficiente
  *       404:
  *         description: Área no encontrada
  */
-router.put('/update/:id', controller.update);
+router.put('/update/:id', [validateUserJwt, requireRole('super_admin')], controller.update);
 
 module.exports = router;

@@ -18,8 +18,10 @@ const createAuthMiddleware = (authServiceUrl) => async (req, res, next) => {
       return handleError(res, response.status, data.message);
     }
 
-    const { userId } = await response.json();
+    const { userId, role, area_id } = await response.json();
     req.userId = userId;
+    req.userRole = role;
+    req.userAreaId = area_id;
     next();
   } catch (error) {
     console.error('Error validando token con auth-service:', error.message);

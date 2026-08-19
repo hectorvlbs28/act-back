@@ -4,8 +4,10 @@ const { randomUUID } = require('crypto');
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRATION_TIME = process.env.JWT_EXPIRATION_TIME;
 
-const generateJwt = (userId) => {
-  const newJwt = jwt.sign({ userId, sessionId: randomUUID() }, JWT_SECRET, { expiresIn: JWT_EXPIRATION_TIME });
+const generateJwt = ({ userId, role, area_id }) => {
+  const newJwt = jwt.sign({ userId, role, area_id, sessionId: randomUUID() }, JWT_SECRET, {
+    expiresIn: JWT_EXPIRATION_TIME,
+  });
 
   const { exp: expirationTime } = jwt.decode(newJwt);
 

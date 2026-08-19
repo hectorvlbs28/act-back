@@ -2,9 +2,6 @@ const { asyncHandler, handleError, HttpStatus } = require('@networking/shared');
 const Area = require('../models/area');
 const User = require('../models/user');
 
-// TODO(Fase 2): gatear estos endpoints con requireRole('super_admin') cuando el
-// middleware de RBAC compartido esté disponible.
-
 exports.create = asyncHandler(async (req, res) => {
   const { name, description, enabled_modules } = req.body;
   const area = await Area.create({ name, description, enabled_modules });

@@ -11,7 +11,7 @@ const validateUserJwt = async (req, res, next) => {
 
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : authHeader;
 
-    const { valid, userId } = validateJwt(token);
+    const { valid, userId, decoded } = validateJwt(token);
     if (!valid) {
       return handleError(res, HttpStatus.UNAUTHORIZED, 'Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.');
     }
@@ -22,6 +22,8 @@ const validateUserJwt = async (req, res, next) => {
     }
 
     req.userId = userId;
+    req.userRole = decoded.role;
+    req.userAreaId = decoded.area_id;
     next();
   } catch (error) {
     console.error('Error en validateUserJwt:', error.message);

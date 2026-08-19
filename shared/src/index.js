@@ -4,6 +4,7 @@ const asyncHandler = require('./asyncHandler');
 const { createAuthMiddleware } = require('./authMiddleware');
 const { extractBearerToken } = require('./extractBearerToken');
 const { buildSwaggerDefinition } = require('./swaggerDefinition');
+const { requireRole, requireSameAreaOrSuperAdmin } = require('./rbac');
 
 module.exports = {
   HttpStatus,
@@ -12,4 +13,6 @@ module.exports = {
   createAuthMiddleware,
   extractBearerToken,
   buildSwaggerDefinition,
+  requireRole,
+  requireSameAreaOrSuperAdmin,
 };

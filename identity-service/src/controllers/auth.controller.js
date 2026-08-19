@@ -21,7 +21,11 @@ exports.signin = asyncHandler(async (req, res) => {
     });
   }
 
-  const { newJwt: userToken, expirationTime } = generateJwt(user._id);
+  const { newJwt: userToken, expirationTime } = generateJwt({
+    userId: user._id,
+    role: user.role,
+    area_id: user.area_id,
+  });
 
   await Session.create({
     user_id: user._id,
