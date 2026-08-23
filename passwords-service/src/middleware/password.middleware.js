@@ -25,4 +25,28 @@ const checkPasswordStatus = async (req, res, next) => {
   }
 };
 
-module.exports = { checkPasswordStatus };
+// Exige permiso de lectura sobre req.password (ya cargado por checkPasswordStatus)
+// según su visibilidad. Las privadas de otros nunca pasan, sin excepción de rol.
+const checkPasswordVisible = (req, res, next) => {
+  const { owner_id, visibility, area_id } = req.password;
+  const isOwner = String(owner_id) === String(req.userId);
+
+  if (isOwner || visibility === 'global') return next();
+
+  if (visibility === 'area') {
+    if (req.userRole === 'super_admin') return next();
+    if (req.userAreaId && String(area_id) === String(req.userAreaId)) return next();
+  }
+
+  return handleError(res, HttpStatus.FORBIDDEN, 'No tienes permiso para ver esta contraseña.');
+};
+
+// Edición/eliminación son exclusivas del creador, sin excepción de rol.
+const checkPasswordOwner = (req, res, next) => {
+  if (String(req.password.owner_id) !== String(req.userId)) {
+    return handleError(res, HttpStatus.FORBIDDEN, 'Solo el creador de la contraseña puede editarla o eliminarla.');
+  }
+  next();
+};
+
+module.exports = { checkPasswordStatus, checkPasswordVisible, checkPasswordOwner };

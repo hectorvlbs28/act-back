@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Area = require('../models/area');
+const { getAdminAreaId } = require('../services/adminAreaCache');
 
 const DEFAULT_AREA_NAME = process.env.DEFAULT_AREA_NAME || 'General';
 const BOOTSTRAP_SUPER_ADMIN_USERNAME = process.env.BOOTSTRAP_SUPER_ADMIN_USERNAME;
@@ -20,9 +21,10 @@ const ensureUserRolesAndDefaultArea = async () => {
   }
 
   if (BOOTSTRAP_SUPER_ADMIN_USERNAME) {
+    const adminAreaId = await getAdminAreaId();
     await User.updateOne(
       { userName: BOOTSTRAP_SUPER_ADMIN_USERNAME, role: { $exists: false } },
-      { $set: { role: 'super_admin', area_id: null } }
+      { $set: { role: 'super_admin', area_id: adminAreaId } }
     );
   }
 

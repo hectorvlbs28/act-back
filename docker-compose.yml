@@ -27,6 +27,7 @@ services:
       LIMIT_SESSIONS: ${LIMIT_SESSIONS}
       BOOTSTRAP_SUPER_ADMIN_USERNAME: ${BOOTSTRAP_SUPER_ADMIN_USERNAME}
       DEFAULT_AREA_NAME: ${DEFAULT_AREA_NAME}
+      PASSWORDS_SERVICE_URL: http://passwords-service:3003
     depends_on:
       - mongo
     restart: unless-stopped

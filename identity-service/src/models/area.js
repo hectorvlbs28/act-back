@@ -24,6 +24,10 @@ const areaSchema = new mongoose.Schema(
       type: [String],
       default: DEFAULT_MODULES,
     },
+    system: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

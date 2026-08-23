@@ -15,7 +15,7 @@
     "dev:gateway": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build api-gateway",
     "// dev:python": "Levanta python-service + gateway en modo development",
     "dev:python": "docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build python-service api-gateway",
-    "// seed:redes": "Crea (idempotente) el área Redes con 1 super_admin, 1 supervisor y 3 operadores. Requiere el stack corriendo (npm run dev)",
-    "seed:redes": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec identity-service node src/seeds/seedRedes.js"
+    "// seed": "BORRA todos los registros (users/sessions/areas/passwords) y siembra 2 super_admin + Redes/Gerencia (supervisor + 3 operadores c/u), cada quien con su propia contraseña de acceso (pass<Grupo><NN>). Requiere el stack corriendo (npm run dev)",
+    "seed": "docker compose -f docker-compose.yml -f docker-compose.dev.yml exec identity-service node src/seeds/seed.js"
   }
 }

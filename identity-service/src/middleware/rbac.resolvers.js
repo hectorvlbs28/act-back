@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { getAdminAreaId } = require('../services/adminAreaCache');
 
 // Para GET /users/get/:id y PUT /users/update/:id
 const resolveUserByParamId = async (req) => {
@@ -12,7 +13,8 @@ const resolveUserByParamId = async (req) => {
 // scoping enviando role=super_admin con area_id ajeno.
 const resolveSignupBodyAreaId = async (req) => {
   const { role = 'operator', area_id } = req.body;
-  return { areaId: role === 'super_admin' ? null : (area_id ?? null) };
+  if (role === 'super_admin') return { areaId: await getAdminAreaId() };
+  return { areaId: area_id ?? null };
 };
 
 module.exports = { resolveUserByParamId, resolveSignupBodyAreaId };

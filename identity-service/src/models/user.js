@@ -31,14 +31,7 @@ const userSchema = new mongoose.Schema(
     area_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Area',
-      default: null,
-      validate: {
-        validator: function (value) {
-          if (this.role === 'super_admin') return value == null;
-          return value != null;
-        },
-        message: 'area_id es requerido para supervisor/operator, y debe quedar vacío para super_admin.',
-      },
+      required: [true, 'area_id es requerido.'],
     },
     deleted: {
       type: Boolean,

@@ -6,6 +6,7 @@ const swaggerUi = require('swagger-ui-express');
 const connectDB = require('./config/database');
 const swaggerSpec = require('./config/swagger');
 const passwordsRoutes = require('./routes/passwords');
+const { purgeLegacyPasswords } = require('./migrations/purgeLegacyPasswords');
 
 const app = express();
 
@@ -22,6 +23,8 @@ app.use('/', passwordsRoutes);
 
 const PORT = process.env.PORT || 3003;
 
-connectDB().then(() => {
-  app.listen(PORT, () => console.log(`🔑 Passwords-service corriendo en el puerto ${PORT}`));
-});
+connectDB()
+  .then(() => purgeLegacyPasswords())
+  .then(() => {
+    app.listen(PORT, () => console.log(`🔑 Passwords-service corriendo en el puerto ${PORT}`));
+  });

@@ -9,6 +9,7 @@ const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const areasRoutes = require('./routes/areas');
 const validateRoute = require('./routes/validate');
+const { ensureAdminArea } = require('./migrations/ensureAdminArea');
 const { ensureUserRolesAndDefaultArea } = require('./migrations/ensureUserRolesAndDefaultArea');
 
 const app = express();
@@ -30,6 +31,7 @@ app.use('/validate', validateRoute);
 const PORT = process.env.PORT || 3001;
 
 connectDB()
+  .then(() => ensureAdminArea())
   .then(() => ensureUserRolesAndDefaultArea())
   .then(() => {
     app.listen(PORT, () => console.log(`🪪 Identity-service corriendo en el puerto ${PORT}`));

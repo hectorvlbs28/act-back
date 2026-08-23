@@ -26,6 +26,11 @@ exports.update = asyncHandler(async (req, res) => {
   const area = await Area.findById(id);
   if (!area) return handleError(res, HttpStatus.NOT_FOUND, 'Área no encontrada.');
 
+  // Regla de negocio: el área Admin es del sistema y no puede desactivarse, ni siquiera por super_admin.
+  if (status === 'deactivated' && area.system) {
+    return handleError(res, HttpStatus.BAD_REQUEST, 'El área Admin es del sistema y no puede desactivarse.');
+  }
+
   // Regla de negocio: un área no puede darse de baja mientras tenga usuarios activos asignados.
   if (status === 'deactivated' && area.status !== 'deactivated') {
     const activeUsersCount = await User.countDocuments({ area_id: id, deleted: false });
